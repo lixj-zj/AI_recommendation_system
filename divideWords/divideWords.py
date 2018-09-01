@@ -30,9 +30,9 @@ jieba:
 import pyhanlp
 from aip import AipNlp
 import jieba
-jieba.load_userdict("./userDict.txt")   # 添加自定义字典，位于import jieba下面
 import jieba.analyse
 from collections import Counter
+jieba.load_userdict("./userDict.txt")   # 添加自定义字典，位于import jieba下面
 
 class hanlp:
     pass
