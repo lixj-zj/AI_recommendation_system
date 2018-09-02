@@ -89,6 +89,7 @@ if __name__ == '__main__':
     title = "9月将实施这些新规 涉及车辆 出入境等多5大方面"
     text = "开车的朋友们，9月更省事了。公安部20项交管改革新举措9月1号起全面推行。"
 
+
     # jieba_nlp = jieba_nlp(text)
     # print(jieba_nlp.cut2words())
     # print(jieba_nlp.extractKeyWords_TFIDF())
