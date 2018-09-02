@@ -2,7 +2,7 @@
  !/usr/bin/env python3.6
  -*- coding: utf-8 -*-
  --------------------------------------
- @Description : HanLP, baiduNLP, jieba分词对比
+ @Description : HanLP, baiduNLP, jieba Compared
  百度：
     分词
     文章标签
