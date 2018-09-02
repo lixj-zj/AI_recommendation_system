@@ -12,7 +12,6 @@ hanlp：
     篇章理解
         关键词提取
         自动摘要
-    智能推荐
 jieba:
     分词-并提取top N 的词
     添加自定义词典
@@ -27,15 +26,32 @@ jieba:
  --------------------------------------
 """
 
-import pyhanlp
+from pyhanlp import *
 from aip import AipNlp
 import jieba
 import jieba.analyse
 from collections import Counter
 jieba.load_userdict("./userDict.txt")   # 添加自定义字典，位于import jieba下面
 
-class hanlp:
-    pass
+class hanlp_nlp:
+    def __init__(self, text):
+        self.text = text
+
+    def cut2words(self):
+        cutWordsResult = HanLP.segment(self.text)
+        resultList = []
+        for wordTerm in cutWordsResult:
+            # 判断词性添加单词
+            if str(wordTerm.nature) in ("n", "nz", "nr"):
+                resultList.append(str(wordTerm.word))
+        wordsListTopN = Counter(list(resultList)).most_common(20)
+        return wordsListTopN
+
+    def extractKeyWords(self):
+        print(HanLP.extractKeyword(self.text, 10))
+
+    def extractSummary(self):
+        print(HanLP.extractSummary(self.text, 5))
 
 class jieba_nlp:
     def __init__(self, text):
@@ -89,8 +105,10 @@ if __name__ == '__main__':
     title = "9月将实施这些新规 涉及车辆 出入境等多5大方面"
     text = "开车的朋友们，9月更省事了。公安部20项交管改革新举措9月1号起全面推行。"
 
-
-
+    # hanlp_nlp = hanlp_nlp(text)
+    # hanlp_nlp.cut2words()
+    # hanlp_nlp.extractKeyWords()
+    # hanlp_nlp.extractSummary()
 
     # jieba_nlp = jieba_nlp(text)
     # print(jieba_nlp.cut2words())
@@ -101,7 +119,3 @@ if __name__ == '__main__':
     # baidu_nlp.cut2words()
     # baidu_nlp.lableOfArticles()
     # baidu_nlp.classifyArticles()
-
-
-
-
