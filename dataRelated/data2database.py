@@ -12,3 +12,11 @@
  @Contact     : lixj_zj@163.com
  --------------------------------------
 """
+
+import pymysql
+
+from dataRelated import dataProcessing
+
+oneJsonData = dataProcessing.getOneJsonData()
+
+

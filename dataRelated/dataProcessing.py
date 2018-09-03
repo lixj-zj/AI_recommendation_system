@@ -31,7 +31,7 @@ class jsonData:
         self.dateTime = dateTime
 
 # 针对特定格式的json文件
-def jsonDataProcessing():
+def getOneJsonData():
     with open("../test/news_0000003.json", 'r', encoding="utf-8") as f:
         text = json.load(f)     # 处理json文件，load(f)
 
@@ -49,6 +49,6 @@ def jsonDataProcessing():
         return oneJsonData
 
 if __name__ == '__main__':
-    oneJsonData = jsonDataProcessing()
-    print(oneJsonData.title)
+    oneJsonData = getOneJsonData()
+    # print(oneJsonData.title)
 
