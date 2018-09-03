@@ -22,24 +22,33 @@ import os
 import json
 import datetime
 
+class jsonData:
+    def __init__(self, uuid, url, title, content, dateTime):
+        self.uuid = uuid
+        self.url = url
+        self.title = title
+        self.content = content
+        self.dateTime = dateTime
+
 # 针对特定格式的json文件
-with open("../test/news_0000001.json", 'r', encoding="utf-8") as f:
-    text = json.load(f)     # 处理json文件，load(f)
+def jsonDataProcessing():
+    with open("../test/news_0000003.json", 'r', encoding="utf-8") as f:
+        text = json.load(f)     # 处理json文件，load(f)
 
-    # print(text["uuid"])
-    # print(text["url"])
-    # print(text["title"])
+        title = text["title"]
+        title1 = title.split("-")[0]
 
+        content = text['text']
+        content1 = content[:content.find("上一页")].replace("\n", "").replace(" ", "")
 
-    content = text['text']
+        timestring = text["published"].split(".")[0].replace("T", " ")
+        # string to datetime
+        dateTime = datetime.datetime.strptime(timestring, "%Y-%m-%d %H:%M:%S")
 
+        oneJsonData = jsonData(text["uuid"], text["url"], title1, content1, dateTime)
+        return oneJsonData
 
-
-    # timestring = text["published"].split(".")[0].replace("T", " ")
-    # string to datetime
-    # dateTime = datetime.datetime.strptime(timestring, "%Y-%m-%d %H:%M:%S")
-    # print(dateTime)
-
-
-
+if __name__ == '__main__':
+    oneJsonData = jsonDataProcessing()
+    print(oneJsonData.title)
 
