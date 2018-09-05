@@ -18,7 +18,6 @@
  --------------------------------------
 """
 
-import os
 import json
 import datetime
 
@@ -35,17 +34,17 @@ def getOneJsonData():
     with open("../test/news_0000003.json", 'r', encoding="utf-8") as f:
         text = json.load(f)     # 处理json文件，load(f)
 
-        title = text["title"]
-        title1 = title.split("-")[0]
+        originalTitle = text["title"]
+        title = originalTitle.split("-")[0]
 
-        content = text['text']
-        content1 = content[:content.find("上一页")].replace("\n", "").replace(" ", "")
+        originalContent = text['text']
+        content = originalContent[:originalContent.find("上一页")].replace("\n\n", "。").replace("\n", "").replace(" ", "")
 
-        timestring = text["published"].split(".")[0].replace("T", " ")
+        originalTime = text["published"].split(".")[0].replace("T", " ")
         # string to datetime
-        dateTime = datetime.datetime.strptime(timestring, "%Y-%m-%d %H:%M:%S")
+        dateTime = datetime.datetime.strptime(originalTime, "%Y-%m-%d %H:%M:%S")
 
-        oneJsonData = jsonData(text["uuid"], text["url"], title1, content1, dateTime)
+        oneJsonData = jsonData(text["uuid"], text["url"], title, content, dateTime)
         return oneJsonData
 
 if __name__ == '__main__':
