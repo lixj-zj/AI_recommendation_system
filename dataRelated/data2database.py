@@ -16,7 +16,7 @@
 import pymysql
 import time
 from dataRelated import dataProcessing
-
+import traceback
 
 def write2mysql(jsonData):
     conn = pymysql.connect(host="localhost", user='root', password='123456789', database = 'ai_recommendation', charset='utf8')
@@ -28,6 +28,7 @@ def write2mysql(jsonData):
         cursor.execute(sql)
         conn.commit()
     except:
+        print(traceback.format_exc())
         conn.rollback()
 
 if __name__ == '__main__':
