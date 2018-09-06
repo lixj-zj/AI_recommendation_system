@@ -29,6 +29,10 @@ class jsonData:
         self.content = content
         self.dateTime = dateTime
 
+    def jsonDataList(self):
+        jsonDataList = [self.uuid, self.title, self.dateTime, self.url, None, self.content, self.dateTime]
+        return jsonDataList
+
 # 针对特定格式的json文件
 def getOneJsonData():
     with open("../test/news_0000003.json", 'r', encoding="utf-8") as f:
