@@ -31,6 +31,7 @@ class data2Mysql:
         self.conn = pymysql.connect(host = self.host, user = self.user, password = self.password, database = self.database, charset = self.charset)
         self.cursor = self.conn.cursor();
 
+    # 异步插入数据
     def asynchronous(self, maxLineInsert, totalDataVolume, jsonData):
         taskList = [gevent.spawn(self.write2mysql(i, i+maxLineInsert, jsonData)) for i in range(1, totalDataVolume, maxLineInsert)]
         gevent.joinall(taskList)
