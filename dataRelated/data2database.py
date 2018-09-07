@@ -15,38 +15,57 @@
 
 import pymysql
 import time
+import gevent
 from dataRelated import dataProcessing
 import traceback
 
-class pymysql:
+class data2Mysql:
     def __init__(self):
-        pass
+        self.host = "localhost"
+        self.user = "root"
+        self.password = "123456789"
+        self.database = "ai_recommendation"
+        self.charset = "utf8"
 
-def write2mysql(jsonData):
-    conn = pymysql.connect(host="localhost", user='root', password='123456789', database = 'ai_recommendation', charset='utf8')
-    cursor = conn.cursor();
+    def DBConnect(self):
+        self.conn = pymysql.connect(host = self.host, user = self.user, password = self.password, database = self.database, charset = self.charset)
+        self.cursor = self.conn.cursor();
 
-    list = []
-    for i in range(200):
-        list.append((jsonData.uuid, jsonData.title, jsonData.dateTime, jsonData.url, None,
-                     jsonData.content, time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
+    def asynchronous(self, maxLineInsert, totalDataVolume, jsonData):
+        taskList = [gevent.spawn(self.write2mysql(i, i+maxLineInsert, jsonData)) for i in range(1, totalDataVolume, maxLineInsert)]
+        gevent.joinall(taskList)
+        self.cursor.close()
+        self.conn.close()
 
-    sql = "INSERT INTO news(news_id, title, time_publish, source, abstract, content, time_create) values " \
-          "(%s, %s, %s, %s, %s, %s, %s)"
-    print(sql)
-    try:
-        affectedRows = cursor.executemany(sql, list)
-        if affectedRows:
-            print("已完成：", affectedRows, "行.")
-        conn.commit()
-    except:
-        print(traceback.format_exc())
-        conn.rollback()
+    def write2mysql(self, nmin, nmax, jsonData):
+        list = []
+        for i in range(nmin, nmax):
+            list.append((jsonData.uuid, jsonData.title, jsonData.dateTime, jsonData.url, None,
+                         jsonData.content, time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
 
+        sql = "INSERT INTO news(news_id, title, time_publish, source, abstract, content, time_create) values " \
+              "(%s, %s, %s, %s, %s, %s, %s)"
+        try:
+            affectedRows = self.cursor.executemany(sql, list)
+            # 打印输出依然耗时
+            # if affectedRows:
+            #     print("已完成：", affectedRows, "行.")
+            self.conn.commit()
+        except:
+            print(traceback.format_exc())
+            self.conn.rollback()
+
+# jsonData 作为参数传递的次数越少越好
 if __name__ == '__main__':
     oneJsonData = dataProcessing.getOneJsonData()
+
+    # 每次最大插入行数
+    maxLineInsert = 100
+    # 插入数据总数
+    totalDataVolume = 1000
+
     beginTime = time.time()
-    write2mysql(oneJsonData)
+    data2Mysql = data2Mysql()
+    data2Mysql.DBConnect()
+    data2Mysql.asynchronous(maxLineInsert, totalDataVolume, oneJsonData)
     print("used time:", (time.time()-beginTime))
-
-
