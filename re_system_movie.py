@@ -3,6 +3,7 @@
  -*- coding: utf-8 -*-
  --------------------------------------
  @Description : 简单的电影推荐系统
+ 电影数据集下载地址：https://grouplens.org/datasets/movielens/  ，搜索：  ml-100k.zip (size: 5 MB, checksum)
  --------------------------------------
  @File        : re_system_movie.py
  @Time        : 2018/11/1 20:52
